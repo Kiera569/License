@@ -1,0 +1,33 @@
+.ant-table-wrapper {
+  width:95%;
+  margin:0 auto;
+  background-color:white;
+}
+.action {
+  display: flex;
+  justify-content:space-between;
+  background-color: white;
+    width: 95%;
+    margin: 20px auto;
+    padding: 5px 16px;
+}
+.time-box {
+  display: flex;
+}
+.ant-modal {
+  width:530px;
+  line-height: 4.5;
+}
+.download {
+  margin-right: 20px;
+  border: none;
+}
+.ant-table-pagination.ant-pagination {
+  margin: 16px;
+}
+.operate span{
+}
+.operate .delete{
+  color:red;
+  cursor: pointer;
+}

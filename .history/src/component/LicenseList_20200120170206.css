@@ -1,0 +1,40 @@
+.ant-table-wrapper {
+  width:95%;
+  margin:0 auto;
+  background-color:white;
+}
+.action {
+  display: flex;
+  justify-content:space-between;
+  background-color: white;
+    width: 95%;
+    margin: 20px auto;
+    padding: 5px 16px;
+}
+.rigght.action .ant-input-affix-wrapper, .login-form-button {
+
+}
+.time-box {
+  display: flex;
+}
+.ant-modal {
+  line-height: 4.5;
+}
+.ant-modal-content {
+  width: 750px;
+}
+.download {
+  margin-right: 20px;
+  border: none;
+}
+.ant-table-pagination.ant-pagination {
+  margin: 16px;
+}
+.operate span{
+  color:#096dd9;
+  cursor: pointer;
+
+}
+.operate .delete{
+  color:red;
+}

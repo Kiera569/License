@@ -1,0 +1,15 @@
+.ant-table-wrapper {
+  width:95%;
+  margin:0 auto;
+  background-color:white;
+}
+.action {
+  display: flex;
+  justify-content:space-between;
+}
+.time-box {
+  display: flex;
+}
+.ant-modal {
+  width:530px;
+}

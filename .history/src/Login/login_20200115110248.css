@@ -1,0 +1,31 @@
+@import '~antd/dist/antd.css';
+body,html{
+  margin:0;
+  overflow:hidden;
+  background-color: aliceblue;
+ 
+}
+.loginBox {
+  width: 100%;
+background-image: url('../img/timg.jpg');
+ background-repeat: no-repeat;
+ background-size: cover
+}
+ .login-form {
+  max-width: 300px;
+  margin:0 auto;
+  margin-top:320px
+}
+ .login-form-forgot {
+  float: right;
+}
+ .login-form-button {
+  width: 100%;
+}
+.ant-input-affix-wrapper,.login-form-button{
+  font-size: 16px;
+  width: 350px;
+  height: 45px;
+}
+
+

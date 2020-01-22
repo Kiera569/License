@@ -1,0 +1,11 @@
+.ant-table-wrapper {
+  width"90%
+  background-color:white;
+}
+.action {
+  display: flex;
+  justify-content:space-between;
+}
+.time-box {
+  display: flex;
+}

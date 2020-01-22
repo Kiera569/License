@@ -1,0 +1,16 @@
+@import '~antd/dist/antd.css';
+
+.login {
+  background-color: aliceblue;
+  margin:0 auto;
+}
+ .login-form {
+  max-width: 300px;
+  margin:0 suto;
+}
+ .login-form-forgot {
+  float: right;
+}
+ .login-form-button {
+  width: 100%;
+}

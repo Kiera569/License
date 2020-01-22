@@ -1,0 +1,27 @@
+@import '~antd/dist/antd.css';
+body,html{
+  margin:0;
+  overflow:hidden;
+  background-color: aliceblue;
+ background-image: url('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1579066195988&di=99f32cfb5f0d9146513e9bd8c382ff33&imgtype=0&src=http%3A%2F%2Fpic11.nipic.com%2F20101208%2F6370412_175553023065_2.jpg');
+ /* background-repeat: repeat-x; */
+
+}
+ .login-form {
+  max-width: 300px;
+  margin:0 auto;
+  margin-top:200px
+}
+ .login-form-forgot {
+  float: right;
+}
+ .login-form-button {
+  width: 100%;
+}
+.ant-input-affix-wrapper,.login-form-button{
+  font-size: 16px;
+  width: 350px;
+  height: 45px;
+}
+
+
