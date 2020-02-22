@@ -67,26 +67,26 @@ class ProjectManage extends React.Component {
   };
 
   // 搜索
-  search = e => {
-    var html = "";
-    var value = "";
-    // 将输入的字符串与列表data匹配，若包含 则显示搜索内容
-    value = this.ListData.find(item => {
-      return item === e;
-    });
-    // 有结果
-    if (!!value) {
-      html += `
-              <div>
-              <ul>
-              <li className='showSearch'>+${value}</li></ul>
-              </div>
-             `;
-    } else {
-      html += '<div class="no-data">暂时无法找到此选项~</div>';
-    }
-    document.querySelector(".search").html(html);
-  };
+  // search = e => {
+  //   var html = "";
+  //   var value = "";
+  //   // 将输入的字符串与列表data匹配，若包含 则显示搜索内容
+  //   value = this.ListData.find(item => {
+  //     return item === e;
+  //   });
+  //   // 有结果
+  //   if (!!value) {
+  //     html += `
+  //             <div>
+  //             <ul>
+  //             <li className='showSearch'>+${value}</li></ul>
+  //             </div>
+  //            `;
+  //   } else {
+  //     html += '<div class="no-data">暂时无法找到此选项~</div>';
+  //   }
+  //   document.querySelector(".search").html(html);
+  // };
 
   // 新增
   add = val => {
@@ -162,23 +162,28 @@ class ProjectManage extends React.Component {
     const columns = [
       {
         title: "项目ID",
-        dataIndex: "programId",
-        key: "programId"
+        dataIndex: "ID",
+        key: "ID"
       },
       {
         title: "项目名称",
-        dataIndex: "programName",
-        key: "programName"
+        dataIndex: "name",
+        key: "name"
       },
       {
         title: "项目信息",
-        dataIndex: "programInfo",
-        key: "programInfo"
+        dataIndex: "info",
+        key: "info"
       },
       {
         title: "负责人",
         dataIndex: "principal",
         key: "principal"
+      },
+      {
+        title: "备注",
+        dataIndex: "remark",
+        key: "remark"
       },
       {
         title: "操作",
@@ -202,31 +207,19 @@ class ProjectManage extends React.Component {
     ];
     const data = [
       {
-        programId: 1,
-        key: 1,
-        programName: "项目一",
-        consumerAmount: 5,
-        consumerType: "Joindexhn Brown",
-        macAddress: "255.255.255.3",
-        proAddress: "成都",
-        description: "1111111",
-        licenseCheck: "xxxxx",
-        expiryTime: "2020-01-17",
-        issuedTime: "2020-01-14"
+        ID:1,
+        name: "项目一",
+        info:'项目信息',
+        principal:'张三',
+        remark:'sss'
       },
       {
-        programId: 2,
-        key: 2,
-        programName: "项目二",
-        consumerAmount: 6,
-        consumerType: "Jim Green",
-        macAddress: "255.255.255.3",
-        proAddress: "西昌",
-        description: "bbbbbb",
-        licenseCheck: "ttttttttt",
-        expiryTime: "2020-01-17",
-        issuedTime: "2020-01-12"
-      }
+        ID:2,
+        name: "项目2",
+        info:'项目信息',
+        principal:'张三san',
+        remark:'ssssyyy'
+      },
     ];
     return (
       <div>
@@ -241,7 +234,7 @@ class ProjectManage extends React.Component {
             />
             <form method="get" action="http(s)://下载文件的后台接口">
               <Button type="primary" shape="round" icon="download">
-                Download
+                下载
               </Button>
             </form>
           </div>
@@ -266,82 +259,42 @@ class ProjectManage extends React.Component {
             labelAlign="left"
             onSubmit={this.handleOk}
           >
-            <Form.Item label="用户数量" validateStatus="warning">
-              {getFieldDecorator("consumerAmount", {
-                rules: [
-                  {
-                    required: true,
-                    message: "该选项为必填项"
-                  }
-                ],
-                initialValue: inputValue.consumerAmount
+          {/* 项目ID */}
+          <Form.Item label="项目ID">
+              {getFieldDecorator("ID", {
+                initialValue: inputValue.ID
               })(<InputNumber min={0} />)}
+               </Form.Item>
+          {/* 项目信息 */}
+          <Form.Item label="项目信息">
+              {getFieldDecorator("info", {
+              
+                initialValue: inputValue.info 
+              })(<Input.TextArea rows={4} />)}
             </Form.Item>
-            <Form.Item label="用户类型">
-              {getFieldDecorator("consumerType", {
+          {/* 名称 */}
+          <Form.Item label="项目名称">
+              {getFieldDecorator("name", {
                 rules: [
                   {
                     required: true,
                     message: "该选项为必填项"
                   }
                 ],
-                initialValue: inputValue.consumerType
+                initialValue: inputValue.name 
               })(<Input />)}
             </Form.Item>
-            <Form.Item label="描述信息">
-              {getFieldDecorator("description", {
-                rules: [
-                  {
-                    required: true,
-                    message: "该信息不能为空!"
-                  }
-                ],
-                initialValue: inputValue.description
-              })(<Input.TextArea rows={4} placeholder="一般为服务器名称" />)}
+          {/* 负责人 */}
+          <Form.Item label="项目负责人">
+              {getFieldDecorator("principal", {
+                initialValue: inputValue.principal  
+              })(<Input />)}
             </Form.Item>
-            <Form.Item label="校验信息">
-              {getFieldDecorator("licenseCheck", {
-                rules: [
-                  {
-                    required: true,
-                    message: "该信息不能为空!"
-                  }
-                ],
-                initialValue: inputValue.licenseCheck
-              })(<Input.TextArea rows={4} placeholder="服务器硬件校验信息" />)}
-            </Form.Item>
-            <Form.Item label="证书生效时间">
-              {getFieldDecorator("issuedTime", {
-                rules: [
-                  {
-                    required: true,
-                    message: "时间不能为空!"
-                  }
-                ],
-                initialValue: moment(inputValue.issuedTime)
-              })(
-                // <div className="time-box">
-                // {/* <ConfigProvider locale={zhCN}> */}
-                <DatePicker format={dateFormat} />
-                // {/* <TimePicker
-                //   defaultValue={moment("00:00", format)}
-                //   format={format}
-                //   style={{ marginLeft: "10px" }}
-                // // /> */}
-                // {/* </ConfigProvider> */}
-                // {/* </div> */}
-              )}
-            </Form.Item>
-            <Form.Item label="证书失效时间">
-              {getFieldDecorator("expiryTime", {
-                rules: [
-                  {
-                    required: true,
-                    message: "时间不能为空!"
-                  }
-                ],
-                initialValue: moment(inputValue.expiryTime)
-              })(<DatePicker format={dateFormat} />)}
+          {/* 备注 */}
+          <Form.Item label="备注">
+              {getFieldDecorator("remark ", {
+                initialValue: inputValue.remark  
+              })(<Input.TextArea rows={4} />)}
             </Form.Item>
           </Form>
         </Modal>

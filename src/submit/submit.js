@@ -12,7 +12,8 @@ const { SubMenu } = Menu;
 
 class Submit extends React.Component {
   state = {
-    data: [] // 渲染列表的数据
+    data: [] ,// 渲染列表的数据
+    collapsed: false,
   };
 
   // 页面初始化  加载数据
@@ -74,6 +75,7 @@ class Submit extends React.Component {
             defaultOpenKeys={["sub1"]}
             mode="inline"
           >
+            
             <SubMenu key="sub1" title={<span>服务授权证书</span>}>
               <Menu.Item
                 key="1"
@@ -81,24 +83,25 @@ class Submit extends React.Component {
                   this.goThird("/submit/licenseList", "push");
                 }}
               >
-                授权管理
+                授权码管理
               </Menu.Item>
               <Menu.Item
                 key="2"
-                onClick={() => {
-                  this.goThird("/submit/userManage", "push");
-                }}
-              >
-                用户管理
-              </Menu.Item>
-              <Menu.Item
-                key="3"
                 onClick={() => {
                   this.goThird("/submit/projectManage", "push");
                 }}
               >
                 项目管理
               </Menu.Item>
+              {/* <Menu.Item
+                key="3"
+                onClick={() => {
+                  this.goThird("/submit/userManage", "push");
+                }}
+              >
+                用户管理
+              </Menu.Item> */}
+              
             </SubMenu>
           </Menu>
         </Sider>

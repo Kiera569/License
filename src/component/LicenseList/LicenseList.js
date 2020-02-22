@@ -4,6 +4,7 @@ import {
   Table,
   Divider,
   Popconfirm,
+  Select,
   Input,
   Modal,
   Form,
@@ -16,6 +17,7 @@ import Axios from "axios";
 import "./LicenseList.css";
 
 const { Search } = Input;
+const { Option } = Select;
 const dateFormat = "YYYY-MM-DD HH:mm";
 
 class LicenseList extends React.Component {
@@ -25,8 +27,10 @@ class LicenseList extends React.Component {
     modalTitle: "",
     isAdd: true,
     inputValue: {
-      consumerAmount: 1,
-      consumerType: "user"
+      // consumerAmount: 1,
+      // consumerType: "user"
+      ipCheck:"true",
+      macCheck:"true",
     },
     ListData: [] // 列表数据
   };
@@ -86,44 +90,44 @@ class LicenseList extends React.Component {
     this.setState({ visible: true, isAdd: true, modalTitle: "新增" });
   };
 
-  // 修改
-  edit = value => {
-    this.setState({
-      visible: true,
-      isAdd: false,
-      modalTitle: "修改",
-      inputValue: value
-    });
-  };
+  // // 修改
+  // edit = value => {
+  //   this.setState({
+  //     visible: true,
+  //     isAdd: false,
+  //     modalTitle: "修改",
+  //     inputValue: value
+  //   });
+  // };
 
-  // 删除当前记录
-  delete = key => {
-    Axios.post("ccccc", key)
-      .then((code, data) => {
-        if (code === 0) {
-          this.getData();
-        }
-      })
-      .catch(res => {
-        notification.error({
-          message: "删除失败",
-          placement: "topRight",
-          top: 50,
-          duration: 3
-        });
-      });
-  };
+  // // 删除当前记录
+  // delete = key => {
+  //   Axios.post("ccccc", key)
+  //     .then((code, data) => {
+  //       if (code === 0) {
+  //         this.getData();
+  //       }
+  //     })
+  //     .catch(res => {
+  //       notification.error({
+  //         message: "删除失败",
+  //         placement: "topRight",
+  //         top: 50,
+  //         duration: 3
+  //       });
+  //     });
+  // };
 
-  // 确认删除
-  confirm = e => {
-    this.delete();
-  };
+  // // 确认删除
+  // confirm = e => {
+  //   this.delete();
+  // };
 
   // 确定
   handleOk = e => {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        Axios.post("/license/generateLicense", values)
+        Axios.post("/license/add", values)
           .then(res => {
             if (res.status === 200) {
               this.getData();
@@ -163,6 +167,12 @@ class LicenseList extends React.Component {
         dataIndex: "description",
         key: "description"
       },
+      
+      {
+        title: "证书生效时间",
+        dataIndex: "issuedTime",
+        key: "issuedTime"
+      },
       {
         title: "证书失效时间",
         dataIndex: "expiryTime",
@@ -174,11 +184,6 @@ class LicenseList extends React.Component {
         key: "ipAddress"
       },
 
-      {
-        title: "证书生效时间",
-        dataIndex: "issuedTime",
-        key: "issuedTime"
-      },
       {
         title: "授权码文件地址",
         dataIndex: "licenseUrl",
@@ -201,25 +206,25 @@ class LicenseList extends React.Component {
         dataIndex: "projectId",
         key: "projectId"
       },
-      {
-        title: "操作",
-        key: "action",
-        render: (text, record) => (
-          <span className="operate">
-            <span onClick={() => this.edit(record)}>修改</span>
-            <Divider type="vertical" />
-            <Popconfirm
-              title="确定删除该数据"
-              onConfirm={this.confirm}
-              onCancel={this.handleCancel}
-              okText="确认"
-              cancelText="取消"
-            >
-              <span className="delete">删除</span>
-            </Popconfirm>
-          </span>
-        )
-      }
+      // {
+      //   title: "操作",
+      //   key: "action",
+      //   render: (text, record) => (
+      //     <span className="operate">
+      //       <span onClick={() => this.edit(record)}>修改</span>
+      //       <Divider type="vertical" />
+      //       <Popconfirm
+      //         title="确定删除该数据"
+      //         onConfirm={this.confirm}
+      //         onCancel={this.handleCancel}
+      //         okText="确认"
+      //         cancelText="取消"
+      //       >
+      //         <span className="delete">删除</span>
+      //       </Popconfirm>
+      //     </span>
+      //   )
+      // }
     ];
     return (
       <div>
@@ -234,13 +239,14 @@ class LicenseList extends React.Component {
             />
             <form method="get" action="http(s)://下载文件的后台接口">
               <Button type="primary" shape="round" icon="download">
-                Download
+                下载
               </Button>
             </form>
           </div>
         </div>
         <Table columns={columns} dataSource={ListData} />
         <Modal
+        className='modals'
           visible={visible}
           title={modalTitle}
           onOk={this.handleOk}
@@ -259,71 +265,117 @@ class LicenseList extends React.Component {
             labelAlign="left"
             onSubmit={this.handleOk}
           >
-            <Form.Item label="用户数量" validateStatus="warning">
-              {getFieldDecorator("consumerAmount", {
+              {/* 所属项目 --必填*/}
+              <Form.Item label="所属项目">
+              {getFieldDecorator("projectId ", {
                 rules: [
                   {
                     required: true,
-                    message: "该选项为必填项"
+                    message: "该项不能为空!"
                   }
                 ],
-                initialValue: inputValue.consumerAmount
+                initialValue: inputValue.projectId 
               })(<InputNumber min={0} />)}
             </Form.Item>
-            <Form.Item label="用户类型">
-              {getFieldDecorator("consumerType", {
-                rules: [
-                  {
-                    required: true,
-                    message: "该选项为必填项"
-                  }
-                ],
-                initialValue: inputValue.consumerType
+            {/*  序列号*/}
+            <Form.Item label="cpu序列号">
+              {getFieldDecorator("cpuSerial", {
+                initialValue: inputValue.cpuSerial
               })(<Input />)}
             </Form.Item>
-            <Form.Item label="描述信息">
-              {getFieldDecorator("description", {
+            {/* ipCheck--必填（boolelan) */}
+            <Form.Item label="是否开启ip">
+             {getFieldDecorator('ipCheck', {
+               rules: [
+                {
+                  required: true,
+                  message: "该信息不能为空!"
+                }
+            ],
+            initialValue: inputValue.ipCheck
+          })(
+            <Select >
+              <Option value="true">开启</Option>
+              <Option value="false">关闭</Option>
+            </Select>,
+          )}
+        </Form.Item>
+            {/* 授权码文件地址licenseUrl  */}
+            <Form.Item label="授权码文件地址">
+              {getFieldDecorator("licenseUrl", {
+                initialValue: inputValue.licenseUrl
+              })(<Input />)}
+            </Form.Item>
+            {/* mac地址--必填 */}
+            <Form.Item label="mac地址">
+              {getFieldDecorator("macAddress", {
+                initialValue: inputValue.macAddress
+              })(<Input />)}
+            </Form.Item>
+            {/* macCheck */}
+            <Form.Item label="是否开启mac">
+          {getFieldDecorator('macCheck', {
+            initialValue: inputValue.macCheck
+          })(
+            <Select>
+              <Option value="true">开启</Option>
+              <Option value="false">关闭</Option>
+            </Select>
+          )}
+        </Form.Item>
+            {/* IPAddress--必填 */}
+            <Form.Item label="可被允许的IP地址">
+              {getFieldDecorator("ipAddress", {
                 rules: [
                   {
                     required: true,
-                    message: "该信息不能为空!"
+                    message: "该项不能为空!"
                   }
                 ],
-                initialValue: inputValue.description
-              })(<Input.TextArea rows={4} placeholder="一般为服务器名称" />)}
+                initialValue: inputValue.ipAddress
+              })(<Input />)}
             </Form.Item>
-            <Form.Item label="校验信息">
-              {getFieldDecorator("licenseCheck", {
-                rules: [
-                  {
-                    required: true,
-                    message: "该信息不能为空!"
-                  }
-                ],
-                initialValue: inputValue.licenseCheck
-              })(<Input.TextArea rows={4} placeholder="服务器硬件校验信息" />)}
+            {/* 主板序列号 mainBoardSerial  */}
+            <Form.Item label="cpu序列号">
+              {getFieldDecorator("cpuSerial", {
+                initialValue: inputValue.cpuSerial
+              })(<Input />)}
             </Form.Item>
-            <Form.Item label="证书生效时间">
-              {getFieldDecorator("issuedTime", {
-                rules: [
-                  {
-                    required: true,
-                    message: "时间不能为空!"
-                  }
-                ],
-                initialValue: moment(inputValue.issuedTime)
-              })(<DatePicker format={dateFormat} />)}
-            </Form.Item>
+            {/* 失效时间--必填 */}
             <Form.Item label="证书失效时间">
               {getFieldDecorator("expiryTime", {
                 rules: [
                   {
                     required: true,
-                    message: "时间不能为空!"
+                    message: "该项不能为空!"
                   }
                 ],
                 initialValue: moment(inputValue.expiryTime)
               })(<DatePicker format={dateFormat} />)}
+            </Form.Item>
+            {/* 生效时间--必填 */}
+            <Form.Item label="证书生效时间">
+              {getFieldDecorator("issuedTime", {
+                rules: [
+                  {
+                    required: true,
+                    message: "该项不能为空!"
+                  }
+                ],
+                initialValue: moment(inputValue.issuedTime)
+              })(<DatePicker format={dateFormat} />)}
+            </Form.Item>
+             {/* 描述信息--必填 */}
+             <Form.Item label="描述信息">
+              {getFieldDecorator("description", {
+                rules: [
+                  {
+                    required: true,
+                    message: "该项不能为空!"
+                  }
+                ],
+                initialValue: inputValue.description
+              })(<Input.TextArea rows={4} placeholder="一般为服务器名称" />)}
             </Form.Item>
           </Form>
         </Modal>

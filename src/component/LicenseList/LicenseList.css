@@ -42,3 +42,8 @@ margin-top:0px;
   display:flex;
   align-items: center;
 }
+.modals .ant-modal-body{
+height: 75vh;
+overflow: auto;
+}
+
