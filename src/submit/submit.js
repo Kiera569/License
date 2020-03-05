@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { Layout, Menu, Icon, Button } from "antd";
-import Axios from "axios";
+// import Axios from "axios";
 import LicenseList from "../component/LicenseList/LicenseList";
-import UserManage from "../component/userManage/userManage";
+// import UserManage from "../component/userManage/userManage";
 import ProjectManage from "../component/projectManage/projectManage";
 import "./submit.css";
 
@@ -12,14 +12,14 @@ const { SubMenu } = Menu;
 
 class Submit extends React.Component {
   state = {
-    data: [] ,// 渲染列表的数据
+    // data: [] ,// 渲染列表的数据
     collapsed: false,
   };
 
   // 页面初始化  加载数据
-  componentDidMount() {
-    this.getData();
-  }
+  // componentDidMount() {
+  //   this.getData();
+  // }
 
   toggle = () => {
     this.setState({
@@ -27,18 +27,18 @@ class Submit extends React.Component {
     });
   };
 
-  // 获取数据
-  getData = () => {
-    const { data: d } = this.state;
-    Axios.get("/license/getServerInfos").then(({ code, data }) => {
-      if (code === 0) {
-        this.setState({
-          data: [...d, ...data]
-        });
-      }
-    });
-  };
-  e;
+  // // 获取数据
+  // getData = () => {
+  //   // const { data: d } = this.state;
+  //   // Axios.get("/license/list/{id}").then(({ code, data }) => {
+  //   //   if (code === 0) {
+  //   //     this.setState({
+  //   //       data: [...d, ...data]
+  //   //     });
+  //   //   }
+  //   // });
+  // };
+
 
   // handleClick = e => {
   //   // console.log(e);
@@ -77,16 +77,16 @@ class Submit extends React.Component {
           >
             
             <SubMenu key="sub1" title={<span>服务授权证书</span>}>
-              <Menu.Item
+              {/* <Menu.Item
                 key="1"
                 onClick={() => {
                   this.goThird("/submit/licenseList", "push");
                 }}
               >
                 授权码管理
-              </Menu.Item>
+              </Menu.Item> */}
               <Menu.Item
-                key="2"
+                key="1"
                 onClick={() => {
                   this.goThird("/submit/projectManage", "push");
                 }}
@@ -125,15 +125,14 @@ class Submit extends React.Component {
             {/* {this.props.children} */}
             <Switch>
               <Route
-                path="/submit/licenseList"
+                path="/submit/licenseList/:id"
                 component={LicenseList}
-                exact
               ></Route>
-              <Route
+              {/* <Route
                 path="/submit/userManage"
                 component={UserManage}
                 exact
-              ></Route>
+              ></Route> */}
               <Route
                 path="/submit/projectManage"
                 component={ProjectManage}

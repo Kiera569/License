@@ -8,16 +8,17 @@ import {
 
 import Login from "./Login/login";
 import Submit from "./submit/submit";
+import Error from './component/404/404'
 // import LicenseList from "./component/LicenseList/LicenseList";
 // import UserManage from "./component/userManage/userManage";
-import ProjectManage from "./component/projectManage/projectManage";
+// import ProjectManage from "./component/projectManage/projectManage";
 
 const routes = () => {
   return (
     <Router>
       <Switch>
         <Route path="/login" component={Login} exact />
-        {/* <Route
+        <Route
           path="/"
           render={() =>
             sessionStorage.getItem("isLogin") ? (
@@ -26,10 +27,11 @@ const routes = () => {
               <Redirect to="/login" />
             )
           }
-        /> */}
+        />
 
-        <Route path="/login" component={Login}></Route>
+        {/* <Route path="/login" component={Login}></Route> */}
         <Route path="/submit" component={Submit}></Route>
+        <Route exact component={Error}/>
       </Switch>
     </Router>
   );

@@ -3,18 +3,18 @@ import {
   Button,
   Table,
   Divider,
-  Popconfirm,
+  // Popconfirm,
   Input,
   Modal,
   Form,
   InputNumber,
-  TimePicker,
-  DatePicker,
-  notification,
-  Icon
+  // TimePicker,
+  // DatePicker,
+   notification,
+  // Icon
   // ConfigProvider
 } from "antd";
-import moment from "moment";
+// import moment from "moment";
 // import "moment/locale/zh-cn";
 // import zhCN from "antd/es/locale/zh_CN";
 import Axios from "axios";
@@ -22,20 +22,36 @@ import "../LicenseList/LicenseList.css";
 
 const { Search } = Input;
 // moment.locale("zh-cn");
-const dateFormat = "YYYY-MM-DD";
+// const dateFormat = "YYYY-MM-DD";
 // const format = "HH:mm";
 
 class ProjectManage extends React.Component {
   state = {
     collapsed: false,
     visible: false,
+    isDestory:false,
     modalTitle: "",
     isAdd: true,
     inputValue: {
       consumerAmount: 1,
       consumerType: "user"
     },
-    ListData: [] // 列表数据
+    ListData: [
+      // {
+      //   ID:1,
+      //   name: "项目一",
+      //   info:'项目信息',
+      //   principal:'张三',
+      //   remark:'sss'
+      // },
+      // {
+      //   ID:2,
+      //   name: "项目2",
+      //   info:'项目信息',
+      //   principal:'张三san',
+      //   remark:'ssssyyy'
+      // },
+    ] // 列表数据
   };
 
   // 页面初始化  加载数据
@@ -45,11 +61,15 @@ class ProjectManage extends React.Component {
 
   // 获取数据
   getData = () => {
-    const { data: d } = this.state;
-    Axios.get("/license/getServerInfos").then(({ code, data }) => {
-      if (code === 0) {
+    console.log(11111)
+    const { ListData} = this.state;
+    Axios.post("http://13281031219.iask.in/project/listByPage",{
+      page:0,
+      pageSize:5,
+    }).then(({ code, data }) => {
+      if (data.code === 0) {
         this.setState({
-          ListData: [...d, ...data]
+          ListData: [...ListData, ...data.data.content]
         });
       }
     });
@@ -67,29 +87,28 @@ class ProjectManage extends React.Component {
   };
 
   // 搜索
-  // search = e => {
-  //   var html = "";
-  //   var value = "";
-  //   // 将输入的字符串与列表data匹配，若包含 则显示搜索内容
-  //   value = this.ListData.find(item => {
-  //     return item === e;
-  //   });
-  //   // 有结果
-  //   if (!!value) {
-  //     html += `
-  //             <div>
-  //             <ul>
-  //             <li className='showSearch'>+${value}</li></ul>
-  //             </div>
-  //            `;
-  //   } else {
-  //     html += '<div class="no-data">暂时无法找到此选项~</div>';
-  //   }
-  //   document.querySelector(".search").html(html);
-  // };
+  search = e => {
+    Axios.get(`http://13281031219.iask.in/project/details/${e}`).then(res=>{
+      if(res.status===200){
+        var arr = [];
+        arr.push(res.data.data);
+        this.setState({
+          ListData:arr
+        })
+      }
+    }).catch(result=>{
+        notification.error({
+          message: "暂时无法找到该项目",
+          placement: "topRight",
+          top: 50,
+          duration: 2
+        });
+    })
+  };
 
   // 新增
   add = val => {
+    this.props.form.resetFields();
     this.setState({ visible: true, isAdd: true, modalTitle: "新增" });
   };
 
@@ -104,38 +123,51 @@ class ProjectManage extends React.Component {
   };
 
   // 删除当前记录
-  delete = key => {
-    Axios.post("ccccc", key)
-      .then((code, data) => {
-        if (code === 0) {
-          this.getData();
-        }
-      })
-      .catch(res => {
-        notification.error({
-          message: "删除失败",
-          placement: "topRight",
-          top: 50,
-          duration: 3
-        });
-      });
-  };
+  // delete = key => {
+  //   console.log("删除");
+  //   // Axios.post("ccccc", key)
+  //   //   .then((code, data) => {
+  //   //     if (code === 0) {
+  //   //       this.getData();
+  //   //     }
+  //   //   })
+  //   //   .catch(res => {
+  //   //     notification.error({
+  //   //       message: "删除失败",
+  //   //       placement: "topRight",
+  //   //       top: 50,
+  //   //       duration: 3
+  //   //     });
+  //   //   });
+  // };
 
-  // 确认删除
-  confirm = e => {
-    this.delete();
-  };
+  // 查看当前项目授权码
+  code = (record)=>{
+     this.props.history.push(`/submit/licenseList/${record.id}`)
+  }
+
+  // // 确认删除
+  // confirm = e => {
+  //   console.log(e,89898);
+  //   this.delete();
+  // };
 
   // 确定
   handleOk = e => {
     this.props.form.validateFieldsAndScroll((err, values) => {
+      var subValue = JSON.stringify(values);
       if (!err) {
-        Axios.post("/project/add", values)
+        if(this.state.modalTitle === '新增'){
+          Axios.post("http://13281031219.iask.in/project/add", {subValue})
           .then(res => {
             if (res.status === 200) {
+                notification.success({
+                  message: "添加成功",
+                  placement: "topRight",
+                  top: 50,
+                  duration: 3
+                });
               this.getData();
-              this.props.form.resetFields();
-              this.setState({ visible: false });
             }
           })
           .catch(result => {
@@ -146,14 +178,43 @@ class ProjectManage extends React.Component {
               duration: 3
             });
           });
-      }
+        } else if(this.state.modalTitle === '修改'){
+          Axios.post("http://13281031219.iask.in/project/edit", {values})
+          .then(res => {
+            if (res.code === 0) {
+              notification.success({
+                message: res.message,
+                placement: "topRight",
+                top: 50,
+                duration: 3
+              });
+              this.getData();
+            }
+          })
+          .catch(result => {
+            notification.error({
+              message: '修改失败',
+              placement: "topRight",
+              top: 50,
+              duration: 3
+            });
+          });
+        }
+        this.props.form.resetFields();
+        this.setState({ visible: false });
+        }
     });
+    this.props.form.resetFields();
+    this.setState({ visible: false });
   };
 
   // 取消
   handleCancel = e => {
     this.props.form.resetFields();
-    this.setState({ visible: false });
+    this.setState({ 
+      visible: false,
+      inputValue:''
+      });
   };
 
   render() {
@@ -162,8 +223,8 @@ class ProjectManage extends React.Component {
     const columns = [
       {
         title: "项目ID",
-        dataIndex: "ID",
-        key: "ID"
+        dataIndex: "id",
+        key: "id"
       },
       {
         title: "项目名称",
@@ -190,9 +251,11 @@ class ProjectManage extends React.Component {
         key: "action",
         render: (text, record) => (
           <span className="operate">
+              <span onClick={() => this.code(record)}>查看授权码</span>
+              <Divider type="vertical" />
             <span onClick={() => this.edit(record)}>修改</span>
-            <Divider type="vertical" />
-            <Popconfirm
+            {/* <Divider type="vertical" /> */}
+            {/* <Popconfirm
               title="确定删除该数据"
               onConfirm={this.confirm}
               onCancel={this.handleCancel}
@@ -200,26 +263,10 @@ class ProjectManage extends React.Component {
               cancelText="取消"
             >
               <span className="delete">删除</span>
-            </Popconfirm>
+            </Popconfirm> */}
           </span>
         )
       }
-    ];
-    const data = [
-      {
-        ID:1,
-        name: "项目一",
-        info:'项目信息',
-        principal:'张三',
-        remark:'sss'
-      },
-      {
-        ID:2,
-        name: "项目2",
-        info:'项目信息',
-        principal:'张三san',
-        remark:'ssssyyy'
-      },
     ];
     return (
       <div>
@@ -229,22 +276,19 @@ class ProjectManage extends React.Component {
           </Button>
           <div className="search">
             <Search
-              placeholder="请输入关键字"
+              placeholder="请输入项目ID"
               onSearch={value => this.search(value)}
+              id="search"
             />
-            <form method="get" action="http(s)://下载文件的后台接口">
-              <Button type="primary" shape="round" icon="download">
-                下载
-              </Button>
-            </form>
           </div>
         </div>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={ListData} rowKey={ListData=>ListData.id}/>
         <Modal
           visible={visible}
           title={modalTitle}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
+          destroyOnClose={true}
           footer={[
             <Button key="back" type="reset" onClick={this.handleCancel}>
               取消
@@ -261,14 +305,13 @@ class ProjectManage extends React.Component {
           >
           {/* 项目ID */}
           <Form.Item label="项目ID">
-              {getFieldDecorator("ID", {
-                initialValue: inputValue.ID
+              {getFieldDecorator("id", {
+                initialValue: inputValue.id
               })(<InputNumber min={0} />)}
                </Form.Item>
           {/* 项目信息 */}
           <Form.Item label="项目信息">
               {getFieldDecorator("info", {
-              
                 initialValue: inputValue.info 
               })(<Input.TextArea rows={4} />)}
             </Form.Item>
